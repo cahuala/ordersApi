@@ -1,0 +1,43 @@
+{
+  "name": "ordersapi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "tsx watch --env-file .env src/server.ts",
+    "test:dev": "NODE_OPTIONS=--experimental-vm-modules npx jest --watchAll --runInBand",
+    "build": "tsup src --out-dir build",
+    "start": "node build/server.js"
+  },
+  "author": "Francisco Monteiro",
+  "license": "ISC",
+  "description": "Sistema para pedidos no restaurante",
+  "dependencies": {
+    "@prisma/client": "^5.19.1",
+    "@types/bcrypt": "^5.0.2",
+    "bcrypt": "^5.1.1",
+    "express": "^4.21.2",
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.14",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.13.10",
+    "@types/supertest": "^6.0.2",
+    "jest": "^29.7.0",
+    "prisma": "^5.19.1",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.6",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.4.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}

@@ -1,0 +1,163 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  customer
+  sale
+}
+
+enum Status {
+  unpaid
+  paid
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String
+  password String
+
+  role       UserRole       @default(customer)
+  deliveries TableSession[]
+  createdAt  DateTime       @default(now()) @map("created_at")
+  updatedAt  DateTime?      @default(now()) @map("update_at")
+  Schedule   Schedule[]
+
+  @@map("users")
+}
+
+model TableSession {
+  id        String    @id @default(uuid())
+  tableNo   String
+  orderNo   String
+  pax       Int
+  table     Table     @relation(fields: [tableNo], references: [id])
+  order     Order     @relation(fields: [orderNo], references: [id])
+  status    Status    @default(unpaid)
+  totalTime String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @default(now()) @map("update_at")
+  User      User?     @relation(fields: [userId], references: [id])
+  userId    String?
+
+  @@map("table_sessions")
+}
+
+model Schedule {
+  id        String    @id @default(uuid())
+  User      User      @relation(fields: [userId], references: [id])
+  table     Table     @relation(fields: [tableNo], references: [id])
+  userId    String
+  tableNo   String
+  when      DateTime
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @default(now()) @map("update_at")
+
+  @@map("schedules")
+}
+
+model Table {
+  id           String         @id @default(uuid())
+  name         String         @unique
+  totalPax     Int
+  TableSession TableSession[]
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime?      @default(now()) @map("update_at")
+  Schedule     Schedule[]
+
+  @@map("tables")
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  icon      String
+  text      String
+  type      String    @unique
+  active    Boolean   @default(false)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @default(now()) @map("update_at")
+
+  @@map("categories")
+}
+
+model Food {
+  id          String      @id @default(uuid())
+  title       String
+  description String
+  price       Float
+  image       String
+  type        String
+  available   Boolean     @default(true)
+  sizes       SizeFood[]
+  addons      AddonFood[]
+  orders      Order[]
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime?   @default(now()) @map("update_at")
+
+  @@map("foods")
+}
+
+model SizeFood {
+  id        String    @id @default(uuid())
+  foodId    String
+  food      Food      @relation(fields: [foodId], references: [id])
+  price     Float
+  sizeId    String
+  size      Size      @relation(fields: [sizeId], references: [id])
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @default(now()) @map("update_at")
+
+  @@map("sizes_food")
+}
+
+model Size {
+  id        String     @id @default(uuid())
+  text      String
+  SizeFood  SizeFood[]
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime?  @default(now()) @map("update_at")
+
+  @@map("sizes")
+}
+
+model AddonFood {
+  id        String    @id @default(uuid())
+  addonId   String
+  foodId    String
+  price     Float
+  food      Food      @relation(fields: [foodId], references: [id])
+  addon     Addon     @relation(fields: [addonId], references: [id])
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @default(now()) @map("update_at")
+
+  @@map("addons_food")
+}
+
+model Addon {
+  id        String      @id @default(uuid())
+  text      String
+  AddonFood AddonFood[]
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime?   @default(now()) @map("update_at")
+
+  @@map("addons")
+}
+
+model Order {
+  id           String         @id @default(uuid())
+  foodId       String
+  food         Food           @relation(fields: [foodId], references: [id])
+  quantity     Int
+  price        Float
+  TableSession TableSession[]
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime?      @default(now()) @map("update_at")
+
+  @@map("orders")
+}
