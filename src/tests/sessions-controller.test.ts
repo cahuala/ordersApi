@@ -4,7 +4,7 @@ import { app } from "@/app"
 import { prisma } from "@/database/prisma"
 
 
-describe("SessionsController",()=>{
+describe("SessionsController",()=> {
     let user_id:string
 
     afterAll(async ()=>{
