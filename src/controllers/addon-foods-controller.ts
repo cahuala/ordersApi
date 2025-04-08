@@ -106,4 +106,5 @@ class AddonFoodsController{
         return response.json(addonFood)
     }
 }
+
 export { AddonFoodsController }
