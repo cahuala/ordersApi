@@ -22,7 +22,7 @@ describe("TableSessionsController", () => {
   describe("create", () => {
     it("should create a new table session", async () => {
       req.body = {
-        tableNo: "some-uuid",
+        tableNo: "7889-jhgjh",
         pax: 4,
         status: "unpaid",
         total: 100,
@@ -65,7 +65,7 @@ describe("TableSessionsController", () => {
       await controller.index(req as Request, res as Response)
 
       expect(res.json).toHaveBeenCalledWith({
-        tableSessions: [{ tableNo: "some-uuid" }],
+        tableSessions: [{ tableNo: "7889-jhgjh" }],
         pagination: {
           page: 1,
           perPage: 10,
@@ -83,7 +83,7 @@ describe("TableSessionsController", () => {
 
       await controller.show(req as Request, res as Response)
 
-      expect(res.json).toHaveBeenCalledWith({ tableNo: "some-uuid" })
+      expect(res.json).toHaveBeenCalledWith({ tableNo: "7889-jhgjh" })
     })
 
     it("should throw an error if table session is not found", async () => {
@@ -100,19 +100,19 @@ describe("TableSessionsController", () => {
 
   describe("delete", () => {
     it("should delete a table session", async () => {
-      req.params = { id: "some-uuid" }
+      req.params = { id: "7889-jhgjh" }
       prisma.tableSession.delete = jest.fn().mockResolvedValue({ tableNo: "some-uuid" })
 
       await controller.delete(req as Request, res as Response)
 
-      expect(res.json).toHaveBeenCalledWith({ tableNo: "some-uuid" })
+      expect(res.json).toHaveBeenCalledWith({ tableNo: "7889-jhgjh" })
     })
   })
 
   describe("update", () => {
     it("should update a table session", async () => {
-      req.params = { id: "some-uuid" }
-      req.body = { tableNo: "some-new-uuid", pax: 4, status: "paid", total: 120 }
+      req.params = { id: "896546-dg-hgf" }
+      req.body = { tableNo: "56755-gtd-6", pax: 4, status: "paid", total: 120 }
 
       prisma.tableSession.update = jest.fn().mockResolvedValue(req.body)
 
@@ -124,7 +124,7 @@ describe("TableSessionsController", () => {
 
   describe("close", () => {
     it("should close a table session", async () => {
-      req.params = { id: "some-uuid" }
+      req.params = { id: "7889-jhgjh" }
 
       prisma.tableSession.update = jest.fn().mockResolvedValue({
         status: "paid",
@@ -140,7 +140,7 @@ describe("TableSessionsController", () => {
 
   describe("open", () => {
     it("should open a table session", async () => {
-      req.params = { id: "some-uuid" }
+      req.params = { id: "7889-jhgjh" }
 
       prisma.tableSession.update = jest.fn().mockResolvedValue({
         status: "unpaid",
